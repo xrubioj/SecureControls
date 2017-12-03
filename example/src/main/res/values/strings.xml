@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">SecureControls Example</string>
+    <string name="messsage">Hello World!</string>
+    <string name="secure_button">Secure Button</string>
+</resources>

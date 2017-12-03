@@ -1,0 +1,4 @@
+<resources>
+    <string name="security_alert_message">Screen overlay app detected. This app could capture your
+        sensitive data. We suggest disabling it before continuing.</string>
+</resources>
