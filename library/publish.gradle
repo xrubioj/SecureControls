@@ -1,15 +1,29 @@
 apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
 
-version '0.4.0'
-group 'com.xrubio.securecontrols'
+// https://github.com/bintray/bintray-examples/tree/master/gradle-bintray-plugin-examples
+// https://github.com/bintray/bintray-examples/tree/master/gradle-bintray-plugin-examples/android-gradle-3.0.0-maven-example
+
+ext {
+    dry_run = false
+    pom_group = 'com.xrubio.securecontrols'
+    pom_artifact = 'securecontrols'
+    pom_version = '0.5.0'
+    pom_description = 'Implementation of Android views that detect screen overlays'
+    git_url = 'https://github.com/xrubioj/SecureControls'
+    license = 'Apache-2.0'
+}
+
+version "$pom_version"
+group "$pom_group"
+archivesBaseName = "$pom_artifact"
 
 publishing {
     publications {
         Production(MavenPublication) {
-            artifact("$buildDir/outputs/aar/library-release.aar")
+            artifact("$buildDir/outputs/aar/$pom_artifact-release.aar")
             groupId
-            artifactId 'securecontrols'
+            artifactId "$pom_artifact"
             version this.version
 
             pom.withXml {
@@ -30,6 +44,34 @@ publishing {
     }
 }
 
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+/*
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+*/
+
+//task javadocJar(type: Jar, dependsOn: dokkaJavadoc) {
+task javadocJar(type: Jar, dependsOn: dokka) {
+    classifier = 'javadoc'
+    from dokka.outputDirectory
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
 bintray {
     user = project.hasProperty('bintrayUser') ? project['bintrayUser'] : System.getenv('BINTRAY_USER')
     key = project.hasProperty('bintrayApiKey') ? project['bintrayApiKey'] : System.getenv('BINTRAY_API_KEY')
@@ -37,14 +79,14 @@ bintray {
     configurations = ['archives']
     override = true
     pkg {
-        repo = 'securecontrols'
-        name = 'securecontrols'
-        description = "Implementation of Android views that detect screen overlays"
+        repo = "$pom_artifact"
+        name = "$pom_group:$pom_artifact"
+        description = "$pom_description"
         publish = true
         publicDownloadNumbers = true
-        licenses = ['Apache-2.0']
-        vcsUrl = 'https://github.com/xrubioj/SecureControls'
-        dryRun = false
+        licenses = [ "$license" ]
+        vcsUrl = "$git_url"
+        dryRun = dry_run
         version {
             name = this.version
             desc = "Version ${this.version}"
