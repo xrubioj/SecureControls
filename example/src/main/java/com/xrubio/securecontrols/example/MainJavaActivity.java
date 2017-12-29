@@ -16,7 +16,7 @@ public class MainJavaActivity extends AppCompatActivity {
         SecureButton secureButton = findViewById(R.id.secure_button);
         secureButton.setWindowObscuredTouchEvent((view, motionEvent) -> {
             Toast.makeText(this, "Screen overlay detected", Toast.LENGTH_LONG).show();
-            return Boolean.FALSE;
+            return false;
         });
         secureButton.setOnClickListener(view -> {
             Toast.makeText(this, "Click succeeded!", Toast.LENGTH_LONG).show();
