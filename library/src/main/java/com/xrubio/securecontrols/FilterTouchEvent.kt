@@ -4,6 +4,10 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
 
+/**
+ * Common implementation of {@link FilterTouchEventInterface}. Used by different secure controls by delegation,
+ * in order to group the common functionality and logic.
+ */
 class FilterTouchEvent : FilterTouchEventInterface {
 
     override var windowObscuredTouchEvent: SecurityListener? = null
