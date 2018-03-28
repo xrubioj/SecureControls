@@ -4,7 +4,7 @@ buildscript {
 
     ext {
         kotlin_version = '1.2.10'
-        dokka_version = '0.9.15'
+        dokka_version = '0.9.16'
     }
     repositories {
         google()
